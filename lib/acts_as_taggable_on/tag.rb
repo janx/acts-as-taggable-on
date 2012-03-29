@@ -10,9 +10,11 @@ module ActsAsTaggableOn
 
     ### VALIDATIONS:
 
-    validates_presence_of :name
-    validates_uniqueness_of :name
-    validates_length_of :name, :maximum => 255
+    with_options :unless => :override_validations? do |tag|
+      tag.validates_presence_of :name
+      tag.validates_uniqueness_of :name
+      tag.validates_length_of :name, :maximum => 255
+    end
 
     ### SCOPES:
 
@@ -65,6 +67,10 @@ module ActsAsTaggableOn
 
     def count
       read_attribute(:count).to_i
+    end
+
+    def override_validations?
+      false
     end
 
     class << self
